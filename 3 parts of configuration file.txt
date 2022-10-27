@@ -1,0 +1,8 @@
+1. Metadata - type of component
+
+2. Specification - attribute related to that component (has desired state)
+
+3. Status - automatically created (has actual state)
+
+
+K8S automatically compares actual and desired state (from etcd) to do self healing. 

@@ -1,0 +1,81 @@
+Kubernetes 
+1. Pods - layer above Docker container, generally 1 pod per container or we can have another helper container in the same pod. 
+
+2. Service -  1. since pods have unique ips and if a pod goes down and another one comes up, it will have different IP. 
+	So it will be difficult for our service/pods to communicate with each other. That’s why we use services, because 
+	they have a static IP address. 2. Services are of two types Internal and  external. Internal is used for internal 
+	communication between pods and external to expose to public IP. 3. They also load Balance requests to pods replicas.
+
+3. Ingress - we don’t generally use external services because like Facebook doesn’t have IP address as a domain name. 
+	Ingress helps with that.
+
+4. Config map - our Database URL or other Configs we can store in the config map. And these config maps are attached to pods.
+
+5. Secret - Store secret configs like our database username and password in base 64 encoded style.
+
+6. Volumes - persists our database to a hard drive for backup.
+
+7. Deployment- we don’t directly work with pods, but with deployments. It lets us Configure how many pod replicas we want etc. 
+	Used for stateless pods.
+
+8. Statefulset - like deployment is used for services, stateful is used for DB pods. They manage database replication and 
+	synchronisation between replicas and consistency. But in general, this is hard to configure, so we use a database outside
+	 the K8s cluster.
+
+9. Node - A server that hosts pods. 
+			a) Worker Node 
+				- Nodes that host our Pods.
+				- A worker node needs 3 processes installed
+					a) Container runtime (like Docker)
+					b) Kublet - interacts with container runtime and the node to manage the pod and assign resources 
+								from Node to container
+					c) Kube proxy - forwards request from services to the optimized and appropriate POD. 
+	
+			b) Master Node 
+				- Manages worker nodes, schedules pods, montiors, re-schedule and restart pods, joining new nodes, etc.
+				- It Master Node needs 4 processes 
+					a) API server	- this the cluster gateway which gets initial requests from a client.
+								- Also acts as a gateway for authentication.
+								- Forwards requests to other processes.
+
+					b) Scheduler - decides where to schedule new Pod, and resources needed and talks to workers nodes about it.
+								- Scheduler just decides. (Kublet actually does it)
+
+					c) Controller Manager - Detects state changes of the cluster. Eg: Dieing of pods and thus recovering by
+											talking to the scheduler.
+
+					d) etcd - Cluster BRAIN. Key Value storage.
+							- Stores metadata. Cluster changes are stored in this. 
+							- how does scheduler know which resources are available.
+							- How does controller manager which pods died ?
+							- Where does API Server get cluster health info.
+							- IT DOES NOT STORE ACTUAL APP DATA.
+		
+		- In Practice there are multiple Master Nodes with Load Balanced API Server and distributed "etcd" storage.
+		
+
+
+
+10. MiniKube - A single node K8S cluster with Docker container runtime that contains both Master and Worker node in the 
+			 local machine for mostly testing needs. Needs HyperVisor for running.
+							
+
+11. Kubectl - A powerful command line to interact with the K8S cluster.
+
+12. Helm - A package manager for kubernetes. It contains packages of yaml files.
+		- uses cases
+			a) Suppose you want to uses Elastic Stack for logging. You can either create your own components in your cluster		
+				which is tedious are repetetive, or since Elastic stack logging is pretty much the same for all applications
+				you can uses existing Elastic Stack helm chart. Some goes for MysQL, MongoDb, and other helm charts
+
+			b) You can uses helm as a Template Engine.
+				- Suppose you have various microservices. Now the yaml files for these microservices are pretty much the 
+					same except the image, app name, etc. So you can use helm template engine to create only 1 yaml file 
+					and use variables from values.yaml to configure those values.
+
+			c) Suppose you 1000s of components in you Development cluster, now you can package your configuration into helm	
+				chart which can be used in Staging and Production environment, without having to create them all again.
+
+
+								
+					

@@ -1,0 +1,16 @@
+1. In order to make an external service, just put type as "LoadBalancer" in the spec tag of yaml file.
+
+2. ClusterIP is default which is same as Internal Service.
+
+3. LoadBalancer gives internal as well as external IP address.
+
+4. We can define an external service inorder to call it from a web-browser. But it will have IP address which is not we want 
+	in our application. We want a domain name like google.com 
+   - In order to do that we use Ingress Component.
+   - Ingress component needs an implementation called Ingress Controller (K8S implementation is Nginx ingress controller).
+   - So "http://myapp.com" request comes to our Ingress Controller which reads our Ingress yaml file and redirect the request
+		to a particular service(this needs to be an internal service).
+   - Also, Ingress gives us an IP address which we need to map to the domain name.(which is typically done using a Load Balancer
+		service in a Cloud provider.
+   - Inorder to make application secure using "https", we need to add "tls" configuration in our ingress yaml file, with 
+	SSL certificate key and value kept in the Secret service.
